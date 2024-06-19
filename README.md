@@ -1,7 +1,33 @@
 # upload_files_fastapi
+(Early stage of development)
+
+On upload csv file add it to processing queue and show processing status on SPA index page.
+Handling file - emulation hard CPU bound task.
 
 ## docs
 Standart FastAPI docs on `/docs`.
+
+## Run
+
+```sh
+cd /path/to/project/dir/
+poetry install
+docker compose up
+python3 main.py
+
+```
+### Environments
+
+#### .env.db
+ - POSTGRES_USER
+ - POSTGRES_PASSWORD
+ - POSTGRES_DB
+
+#### .env.redis
+ - REDIS_PASSWORD
+ - REDIS_PORT
+ - REDIS_DATABASES
+
 
 ## API schema
 
@@ -53,3 +79,4 @@ Format: `"event: handlingStatusChanged\ndata: {content}\n\n"` - where content is
 
 ### [processing_file/list.html](./templates/processing_files/list.html)
  - [23] hx-delete `/processing_file/{file_id: int}/` - send delete request for current file for cancel operation or clear local file data.
+
