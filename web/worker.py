@@ -11,10 +11,10 @@ from .db import ProcessingFile, ProcessingFileStatus, sync_session_factory
 
 
 celery = Celery(__name__)
-celery.conf.broker_url = os.environ.get('REDIS_URL', "redis://localhost:6379")
-celery.conf.result_backend = os.environ.get("REDIS_URL", "redis://localhost:6379")
+celery.conf.broker_url = os.environ.get('REDIS_URL', "redis://redis:6379/0")
+celery.conf.result_backend = os.environ.get("REDIS_URL", "redis://redis:6379/0")
 
-client = from_url(os.environ.get('REDIS_URL', "redis://redis:6379"))
+client = from_url(os.environ.get('REDIS_URL', "redis://redis:6379/0"))
 
 
 def update_file(file_id: int, **kwargs):

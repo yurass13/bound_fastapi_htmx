@@ -3,7 +3,7 @@ from asyncio import sleep
 
 import redis.asyncio as redis
 
-client = redis.from_url(os.environ.get('REDIS_URL', "redis://localhost:6379"))
+client = redis.from_url(os.environ.get('REDIS_URL', "redis://redis:6379/0"))
 
 
 async def emit_file_status_changed(file_id: str) -> None:
