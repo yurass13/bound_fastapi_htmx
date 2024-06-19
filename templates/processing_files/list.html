@@ -6,6 +6,8 @@
                 <th>Имя файла</th>
                 <th>Количество данных</th>
                 <th>Статус обработки</th>
+                <th>Длительность обработки</th>
+                <th>Дата создания</th>
                 <th style="width: 22px;"></th>
             </tr>
         </thead>
@@ -19,6 +21,9 @@
                         {% endif %}
                     </td>
                     <td class="{{file.status_text_style}}">{{file.status.value}}</td>
+                    <td>{{file.handling_time | view_time}}</td>
+                    <td>{{file.created_at | view_datetime}}</td>
+
                     <td style="width: 22px;">
                         <div hx-delete="/processing_file/{{file.id}}/">
                             {% if file.status.value == 'Ok' %}
@@ -28,7 +33,7 @@
                             {% else %}
                             {% endif %}
                         </div>
-                </td>
+                    </td>
                 </tr>
             {% else %}
                 <tr>

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:alpine3.20
@@ -18,6 +16,18 @@ services:
       - "6379:6379"
     env_file:
       - ./.env.redis
+
+  worker:
+    build: ./
+    command: python3 -m celery -A web.worker.celery worker --loglevel=info --concurrency=1
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - db
 
 volumes:
   postgres_data:
