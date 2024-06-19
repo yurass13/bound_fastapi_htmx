@@ -9,6 +9,8 @@ services:
       - db
     ports:
       - "8000:8000"
+    volumes:
+      - media:/usr/src/app/media
 
   db:
     image: postgres:alpine3.20
@@ -32,7 +34,7 @@ services:
     build: ./
     command: python3 -m celery -A web.worker.celery worker --loglevel=info --concurrency=1
     volumes:
-      - ./:/usr/src/app
+      - media:/usr/src/app/media
     environment:
       - REDIS_URL=redis://redis:6379/0
       - DB_HOST=db
@@ -43,3 +45,4 @@ services:
 
 volumes:
   postgres_data:
+  media:
