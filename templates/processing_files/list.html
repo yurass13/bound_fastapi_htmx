@@ -1,0 +1,40 @@
+<div class="card px-5 pt-3 my-5">
+    <h2 class="mb-5">Список задач:</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Имя файла</th>
+                <th>Количество данных</th>
+                <th>Статус обработки</th>
+                <th style="width: 22px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{file.filename}}</td>
+                    <td>
+                        {% if file.size %}
+                            {{file.size}}
+                        {% endif %}
+                    </td>
+                    <td class="{{file.status_text_style}}">{{file.status.value}}</td>
+                    <td style="width: 22px;">
+                        <div hx-delete="/processing_file/{{file.id}}/">
+                            {% if file.status.value == 'Ok' %}
+                                <img class="action-icon" src="{{ url_for('static', path='/img/trash.png') }}" alt="Удалить">
+                            {% elif file.status.value in ('Waiting', 'Processing') %}
+                                <img class="action-icon" src="{{ url_for('static', path='/img/clear.png') }}" alt="Отменить">
+                            {% else %}
+                            {% endif %}
+                        </div>
+                </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center fs-3 p-5"><b>Список задач пуст!</b></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

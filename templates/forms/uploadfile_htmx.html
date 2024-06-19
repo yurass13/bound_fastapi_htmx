@@ -1,0 +1,18 @@
+<form 
+    id='form'
+    class="card px-5 pt-3"
+    hx-encoding='multipart/form-data'
+    hx-post='/processing_file/'
+    hx-target="#alerts"
+    hx-swap="afterbegin">
+    <h2>Создать задачу</h2>
+    <div class="mb-3">
+        <label for="fileInput" class="form-label">Файл</label>
+        <input  type='file' name='file' class="form-control" id="fileInput" aria-describedby="fileHelp" accept=".csv">
+        <div id="fileHelp" class="form-text">Выберите csv файл.</div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Загрузить</button>
+    </div>
+</form>
+

@@ -1,0 +1,20 @@
+#alerts {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 999;
+}
+
+.action-icon {
+    height: 22px;
+}
+
+.action-icon:hover {
+    cursor: pointer;
+}
+
+.popup {
+    position: absolute;
+    margin: 100px;
+    background-color: beige;
+}
