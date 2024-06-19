@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "upload-files-fastapi"
+version = "0.1.0"
+description = ""
+authors = ["Yury Stolpov <yurass130@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.0"
+sqlalchemy = "^2.0.30"
+pydantic-settings = "^2.3.3"
+redis = "^5.0.6"
+psycopg = "^3.1.19"
+psycopg-binary = "^3.1.19"
+asyncpg = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
