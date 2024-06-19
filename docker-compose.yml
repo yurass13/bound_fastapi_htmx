@@ -4,13 +4,9 @@ services:
     command: uvicorn web.app:app --host 0.0.0.0 --port 8000 --workers 1
     restart: always
     env_file:
-      - .env.db
-      - .env.redis
-    environment:
-      - DB_HOST=db
+      - .env
     depends_on:
       - db
-      - redis
     ports:
       - "8000:8000"
 
@@ -38,8 +34,7 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379/0
       - DB_HOST=db
     depends_on:
       - web

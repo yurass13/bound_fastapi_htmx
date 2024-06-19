@@ -1,8 +1,9 @@
+import os
 from asyncio import sleep
 
 import redis.asyncio as redis
 
-client = redis.Redis(host="127.0.0.1", port=6379)
+client = redis.from_url(os.environ.get('REDIS_URL', "redis://localhost:6379"))
 
 
 async def emit_file_status_changed(file_id: str) -> None:

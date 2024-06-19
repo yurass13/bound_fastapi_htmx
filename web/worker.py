@@ -1,5 +1,4 @@
 import os
-import asyncio
 from datetime import datetime
 from random import randint
 from time import sleep
@@ -12,10 +11,10 @@ from .db import ProcessingFile, ProcessingFileStatus, sync_session_factory
 
 
 celery = Celery(__name__)
-celery.conf.broker_url = os.environ.get('CELERY_BROKEN_URL', "redis://localhost:6379")
-celery.conf.result_backend = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379")
+celery.conf.broker_url = os.environ.get('REDIS_URL', "redis://localhost:6379")
+celery.conf.result_backend = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
-client = from_url(os.environ.get('CELERY_BROKEN_URL', "redis://redis:6379"))
+client = from_url(os.environ.get('REDIS_URL', "redis://redis:6379"))
 
 
 def update_file(file_id: int, **kwargs):
