@@ -1,11 +1,11 @@
-# upload_files_fastapi
+# Processing files fastapi htmx
 (Early stage of development)
 
 On upload csv file add it to processing queue and show processing status on SPA index page.
 Handling file - emulation hard CPU bound task.
 
 ## docs
-Standart FastAPI docs on `/docs`.
+Swagger on `/docs`.
 
 ## Run
 
@@ -18,6 +18,10 @@ python3 main.py
 ```
 ### Environments
 
+#### .env
+ - DB_HOST
+ - REDIS_URL
+
 #### .env.db
  - POSTGRES_USER
  - POSTGRES_PASSWORD
@@ -25,7 +29,7 @@ python3 main.py
 
 #### .env.redis
  - REDIS_PASSWORD
- - REDIS_PORT
+ - REDIS_PORT - standart
  - REDIS_DATABASES
 
 
