@@ -50,6 +50,8 @@ def process_file(file_id: int):
     sleep(randint(2, 20))
     handling_time = (datetime.min + (datetime.now() - start_time)).time()
 
+    status = ProcessingFileStatus.ERROR
+    size = None
     try:
         if randint(0, 100) == 0:
             raise RuntimeError('Syntetic Error 1%')
@@ -60,9 +62,8 @@ def process_file(file_id: int):
         size = os.path.getsize(file_path)
         status = ProcessingFileStatus.OK
 
-    except (RuntimeError, ValueError):
-        status = ProcessingFileStatus.ERROR
-        size = None
+    except (RuntimeError, FileNotFoundError):
+        pass
     finally:
         update_file(file_id=file_id,
                     status=status,
