@@ -1,5 +1,4 @@
 # Processing files fastapi htmx
-(Early stage of development)
 
 On upload csv file add it to processing queue and show processing status on SPA index page.
 Handling file - emulation hard CPU bound task.
@@ -11,11 +10,11 @@ Swagger on `/docs`.
 
 ```sh
 cd /path/to/project/dir/
-poetry install
 docker compose up
-python3 main.py
-
 ```
+Open homepage:
+[`http://127.0.0.1:8000/`](http://127.0.0.1:8000/)
+<span style="background-color: #e5f5fc; padding: 20px; display: block;">Compose doesn't contains Nginx or ect. If service isn't local change url hostname.</span>
 ### Environments
 
 #### .env
@@ -83,4 +82,3 @@ Format: `"event: handlingStatusChanged\ndata: {content}\n\n"` - where content is
 
 ### [processing_file/list.html](./templates/processing_files/list.html)
  - [23] hx-delete `/processing_file/{file_id: int}/` - send delete request for current file for cancel operation or clear local file data.
-
