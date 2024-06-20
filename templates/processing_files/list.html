@@ -14,7 +14,22 @@
         <tbody>
             {% for file in files %}
                 <tr>
-                    <td>{{file.filename}}</td>
+                    <td>
+                        {% if file.status.value == 'Ok' %}
+                            <a
+                                class="link-primary"
+                                hx-get="{{file.get_absolute_url }}"
+                                hx-target="#modals-here"
+                                hx-trigger="click"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modals-here">
+
+                                {{file.filename}}
+                            </a>
+                        {% else %}
+                            {{file.filename}}
+                        {% endif %}
+                    </td>
                     <td>
                         {% if file.size %}
                             {{file.size}}

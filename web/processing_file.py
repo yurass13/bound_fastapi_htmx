@@ -1,3 +1,4 @@
+import csv
 import os
 from typing import AsyncGenerator
 
@@ -49,8 +50,9 @@ async def get_processing_file_detail(request: Request, file_id: int):
         result = await session.execute(select(ProcessingFile).filter_by(id=file_id))
         processing_file = result.scalar()
 
-        async with aiofiles.open(processing_file.file_path, 'r') as file:
-            rows = await file.readlines(10)
+        with open(processing_file.file_path, 'r') as file:
+            rows = [row for row in csv.reader(file)]
+            print(rows)
 
         return templates.TemplateResponse(request=request,
                                         name="processing_files/detail.html",

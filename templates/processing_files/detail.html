@@ -1,22 +1,32 @@
-<div class="d-flex card popup">
-    <h2>{{file.filename}}</h2>
-    <h3>Статус: <span>{{file.status}}</span></h3>
-    <ul>
-        <li>Размер: <span>{{file.size}}</span></li>
-        <li>Время обработки: <span>{{file.handling_time}}</span></li>
-        <li>Добавлен: <span>{{file.created_at}}</span></li>
-        <li>Обработан: <span>{{file.updated_at}}</span></li>
-    </ul>
-    <table class="table table-bordered">
-        {% for row in rows %}
-            <tr>
-                {% for value in row %}
-                    <td>value</td>
-                {% endfor %} 
-            </tr>
-        {% else %}
-            
-        {% endfor %}
-    </table>
-
+<div class="modal-dialog modal-dialog-centered modal-fullscreen">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">{{file.filename}}</h5>
+            <h5>Статус: <span class="{{file.status_text_style}}">{{file.status.value}}</span></h5>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li>Размер: <span>{{file.size}}</span></li>
+                <li>Время обработки: <span>{{file.handling_time | view_time}}</span></li>
+                <li>Добавлен: <span>{{file.created_at | view_datetime}}</span></li>
+                <li>Обработан: <span>{{file.updated_at | view_datetime}}</span></li>
+            </ul>
+            <table class="table table-bordered">
+                {% for row in data %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{value}}</td>
+                        {% endfor %} 
+                    </tr>
+                {% else %}
+                <tr>
+                    <td><h3>Пустой файл</h3></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
 </div>
