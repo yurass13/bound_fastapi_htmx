@@ -10,11 +10,19 @@ Swagger on `/docs`.
 
 ```sh
 cd /path/to/project/dir/
-docker compose up
+docker compose up -d
 ```
 Open homepage:
 [`http://127.0.0.1:8000/`](http://127.0.0.1:8000/)
 <span style="background-color: #e5f5fc; padding: 20px; display: block;">Compose doesn't contains Nginx or ect. If service isn't local change url hostname.</span>
+
+## Run Development
+
+```sh
+cd /path/to/project/dir/
+docker compose -f docker-compose.dev.yml up -d
+```
+
 ### Environments
 
 #### .env
