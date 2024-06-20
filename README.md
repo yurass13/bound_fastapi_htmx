@@ -25,10 +25,6 @@ docker compose -f docker-compose.dev.yml up -d
 
 ### Environments
 
-#### .env
- - DB_HOST
- - REDIS_URL
-
 #### .env.db
  - POSTGRES_USER
  - POSTGRES_PASSWORD
