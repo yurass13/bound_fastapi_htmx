@@ -40,8 +40,8 @@ class ProcessingFile(Base):
 
     @property
     def file_path(self) -> str:
-        return f"./media/processing_files/{str(self.id)}"
+        return f"./media/processing_files/{self.id}"
 
     @property
     def get_absolute_url(self) -> str:
-        return f"/processing_files/{self.id}/detail/"
+        return f"/processing_file/{self.id}/detail/"

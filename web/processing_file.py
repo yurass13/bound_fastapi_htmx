@@ -1,6 +1,7 @@
 import os
 from typing import AsyncGenerator
 
+import aiofiles
 from fastapi import APIRouter, Request, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy import desc, select, update
@@ -31,8 +32,8 @@ async def create_processing_file(request: Request, file: UploadFile):
         await session.commit()
     await emit_file_status_changed(file_id=file_id)
 
-    with open(f"./media/processing_files/{file_id}", 'wb') as writer:
-        writer.write(file.file.read())
+    async with aiofiles.open(os.path.abspath(f"./media/processing_files/{file_id}"), 'wb') as writer:
+        await writer.write(await file.read())
 
     process_file.delay(file_id)
 
@@ -41,15 +42,15 @@ async def create_processing_file(request: Request, file: UploadFile):
                                       context={"filename": file.filename})
 
 
-@processing_file_router.get("/{file_id: int}/detail/")
-async def get_processing_file(request: Request, file_id: str):
+@processing_file_router.get("/{file_id}/detail/")
+async def get_processing_file_detail(request: Request, file_id: int):
     # TODO optimize for large files
     async with session_factory() as session:
         result = await session.execute(select(ProcessingFile).filter_by(id=file_id))
         processing_file = result.scalar()
 
-        with open(processing_file.file_path, 'r') as file:
-            rows = file.readlines(10)
+        async with aiofiles.open(processing_file.file_path, 'r') as file:
+            rows = await file.readlines(10)
 
         return templates.TemplateResponse(request=request,
                                         name="processing_files/detail.html",
@@ -57,7 +58,7 @@ async def get_processing_file(request: Request, file_id: str):
                                                 "data": rows})
 
 
-@processing_file_router.delete("/{file_id: int}/")
+@processing_file_router.delete("/{file_id}/")
 async def cancel_or_delete_processing_file(file_id: int):
     async with session_factory() as session:
         result = await session.execute(select(ProcessingFile).filter_by(id=file_id))
