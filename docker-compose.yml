@@ -39,7 +39,21 @@ services:
     depends_on:
       - web
       - redis
-      - db
+
+  flower:
+    build:
+      dockerfile: Dockerfile
+    command: python3 -m celery -A web.worker.celery flower
+    restart: always
+    ports:
+      - "5555:5555"
+    volumes:
+      - media:/usr/src/app/media
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - DB_HOST=db
+    depends_on:
+      - worker
 
 volumes:
   postgres_data:

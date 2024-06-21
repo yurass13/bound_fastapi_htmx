@@ -16,6 +16,7 @@ psycopg-binary = "^3.1.19"
 asyncpg = "^0.29.0"
 celery = "^5.4.0"
 aiofiles = "^23.2.1"
+flower = "^2.0.1"
 
 
 [build-system]
