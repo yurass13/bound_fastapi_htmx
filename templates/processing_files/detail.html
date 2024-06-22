@@ -5,25 +5,48 @@
             <h5>Статус: <span class="{{file.status_text_style}}">{{file.status.value}}</span></h5>
         </div>
         <div class="modal-body">
-            <ul>
-                <li>Размер: <span>{{file.size}}</span></li>
-                <li>Время обработки: <span>{{file.handling_time | view_time}}</span></li>
-                <li>Добавлен: <span>{{file.created_at | view_datetime}}</span></li>
-                <li>Обработан: <span>{{file.updated_at | view_datetime}}</span></li>
+            <ul class="list-group row-cols-4">
+                <li class="col list-group-item">
+                    <b>Размер:</b>
+                    <span>
+                        {% if file.size %}
+                            {{file.size}}
+                        {% else %}
+                            Пустой
+                        {% endif %}
+                        b
+                    </span>
+                </li>
+                <li class="col list-group-item"><b>Время обработки:</b> <span>{{file.handling_time | view_time}}</span></li>
+                <li class="col list-group-item"><b>Добавлен: </b><span>{{file.created_at | view_datetime}}</span></li>
+                <li class="col list-group-item"><b>Обработан: </b><span>{{file.updated_at | view_datetime}}</span></li>
             </ul>
-            <table class="table table-bordered">
-                {% for row in data %}
+            <h4 class="ms-5 mt-5 mb-3">Пример данных</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {% for row in data %}
+                        {% if loop.index == 1 %}
+                            <tr class="table-secondary">
+                                <th>#</th>
+                                {% for value in row %}
+                                    <th>{{value}}</th>
+                                {% endfor %} 
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>{{loop.index - 1}}</td>
+                                {% for value in row %}
+                                    <td>{{value}}</td>
+                                {% endfor %} 
+                            </tr>
+                        {% endif %}
+                    {% else %}
                     <tr>
-                        {% for value in row %}
-                            <td>{{value}}</td>
-                        {% endfor %} 
+                        <td><h3>Пустой файл</h3></td>
                     </tr>
-                {% else %}
-                <tr>
-                    <td><h3>Пустой файл</h3></td>
-                </tr>
-                {% endfor %}
-            </table>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
