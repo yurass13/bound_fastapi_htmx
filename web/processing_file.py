@@ -10,7 +10,7 @@ from sqlalchemy import desc, select, update
 from .db import ProcessingFile, ProcessingFileStatus, session_factory
 from .services import emit_file_status_changed, subscribe_file_status_changed
 from .templates import templates
-from .worker import process_file
+from .worker import process_file, terminate_task
 
 CHUNK_SIZE = 1024 * 1024
 
@@ -46,8 +46,13 @@ async def create_processing_file(request: Request, file: UploadFile):
             await file.close()
             await session.commit()
 
+    task = process_file.delay(file_id)
 
-    process_file.delay(file_id)
+    async with session_factory() as session:
+        await session.execute(update(ProcessingFile)
+                                .values(task_id=task.id)
+                                    .filter_by(id=file_id))
+        await session.commit()
 
     return templates.TemplateResponse(request=request,
                                       name="primitives/upload/success.html",
@@ -82,6 +87,9 @@ async def cancel_or_delete_processing_file(file_id: int):
         if processing_file is None:
             raise ValueError()
 
+        if processing_file.task_id:
+            terminate_task(processing_file.task_id)
+
         if processing_file.status == ProcessingFileStatus.OK:
             status = ProcessingFileStatus.REMOVED
             if os.path.exists(processing_file.file_path):
@@ -91,7 +99,7 @@ async def cancel_or_delete_processing_file(file_id: int):
             status = ProcessingFileStatus.CANCELED
         stmt = (
             update(ProcessingFile)
-                .values(status=status)
+                .values(status=status, task_id=None)
                     .filter_by(id=file_id))
 
         await session.execute(stmt)

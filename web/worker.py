@@ -2,8 +2,10 @@ import os
 from datetime import datetime
 from random import randint
 from time import sleep
+import uuid
 
 from celery import Celery
+from celery.result import AsyncResult
 from redis import from_url
 from sqlalchemy import select, update
 
@@ -14,7 +16,7 @@ celery = Celery(__name__)
 celery.conf.broker_url = os.environ.get('REDIS_URL', "redis://redis:6379/0")
 celery.conf.result_backend = os.environ.get("REDIS_URL", "redis://redis:6379/0")
 
-client = from_url(os.environ.get('REDIS_URL', "redis://redis:6379/0"))
+client = from_url(os.environ.get('REDIS_URL', "redis://redis:6379/1"))
 
 
 def update_file(file_id: int, **kwargs):
@@ -69,3 +71,7 @@ def process_file(file_id: int):
                     status=status,
                     handling_time=handling_time,
                     size=size)
+
+
+def terminate_task(task_id: uuid.UUID):
+    AsyncResult(str(task_id)).revoke(terminate=True)
