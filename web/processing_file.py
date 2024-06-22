@@ -12,6 +12,8 @@ from .services import emit_file_status_changed, subscribe_file_status_changed
 from .templates import templates
 from .worker import process_file
 
+CHUNK_SIZE = 1024 * 1024
+
 processing_file_router = APIRouter()
 
 
@@ -30,11 +32,20 @@ async def create_processing_file(request: Request, file: UploadFile):
         await session.flush()
         file_id = processing_file.id
 
-        await session.commit()
-    await emit_file_status_changed(file_id=file_id)
+        try:
+            async with aiofiles.open(os.path.abspath(f"./media/processing_files/{file_id}"), 'wb') as writer:
+                while chunk := await file.read(CHUNK_SIZE):
+                    await writer.write(chunk)
 
-    async with aiofiles.open(os.path.abspath(f"./media/processing_files/{file_id}"), 'wb') as writer:
-        await writer.write(await file.read())
+        except Exception:
+            processing_file.status = ProcessingFileStatus.ERROR
+            return templates.TemplateResponse(request=request,
+                                          name="primitives/upload/dismiss.html",
+                                          context={"filename": file.filename})
+        finally:
+            await file.close()
+            await session.commit()
+
 
     process_file.delay(file_id)
 
