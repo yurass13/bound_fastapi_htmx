@@ -67,8 +67,15 @@ async def get_processing_file_detail(request: Request, file_id: int):
         processing_file = result.scalar()
 
         try:
+            # TODO move to get_data_sample - separate endpoint. Add sample size option. Add pagination. 
             with open(processing_file.file_path, 'r') as file:
-                rows = [row for row in csv.reader(file)]
+                rows = []
+                for row in csv.reader(file):
+                    if len(rows) >= 10:
+                        break
+
+                    rows.append(row)
+
         except FileNotFoundError:
             rows = None
 
